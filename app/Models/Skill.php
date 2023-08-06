@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Skill extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'image'];
+
+    public function project()
+    {
+        return $this->hasMany(Project::class);
+    }
 }
