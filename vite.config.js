@@ -17,4 +17,12 @@ export default defineConfig({
             },
         }),
     ],
+    server: {
+        hmr: {
+            host: 'laravel-inertia.test',
+        },
+        watch: {
+            usePolling: true
+        }
+    }
 });
