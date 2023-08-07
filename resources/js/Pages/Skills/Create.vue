@@ -1,20 +1,63 @@
 <template>
-    <Head title="Skills Index" />
+    <Head title="Skills Index"/>
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">New Skill</h2>
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-end m-2 p-2">
-                    Form
-                </div>
+            <div class="max-w-md mx-auto sm:px-6 lg:px-8 bg-white">
+                <form class="p-4" @submit.prevent="submit">
+                    <div>
+                        <InputLabel for="name" value="Name"/>
+                        <TextInput
+                            id="name"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.name"
+                        />
+                        <InputError class="mt-2" :message="form.errors.name"/>
+                    </div>
+
+                    <div class="block mt-4">
+                        <InputLabel for="image" value="Image"/>
+                        <TextInput
+                            id="image"
+                            type="file"
+                            @input="form.image = $event.target.files[0]"
+                            class="mt-1 block w-full"
+                            autofocus
+                        />
+                        <InputError class="mt-2" :message="form.errors.image"/>
+                    </div>
+
+                    <div class="flex items-center justify-end mt-4">
+                        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }"
+                                       :disabled="form.processing">
+                            Store
+                        </PrimaryButton>
+                    </div>
+                </form>
             </div>
         </div>
     </AuthenticatedLayout>
 </template>
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import {Head, useForm} from '@inertiajs/vue3';
+import InputLabel from "@/Components/InputLabel.vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
+
+const form = useForm({
+    name: '',
+    image: null,
+});
+const submit = () => {
+    form.post(route('skills.store'), {
+        onFinish: () => form.reset('name', 'image'),
+    });
+};
 </script>
